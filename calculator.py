@@ -1,7 +1,11 @@
 num1 = float(input("enter the number:" ))
-operator = input("enter the operator(+,-): ")
+operator = input("enter the operator(+,-,%,X): ")
 num2 = float(input("enter the number:" ))
-if operator = "+":
+if operator == "+":
   print(num1 + num2)
-elif operator = "-":
+elif operator == "-":
   print(num1 - num2)
+elif operator == "%":
+  print(num1 / num2)
+elif operator == "X":
+  print(num1 * num2)
