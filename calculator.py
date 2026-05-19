@@ -1,26 +1,41 @@
-userusing = input("바로 식을 지키고 있나요? (Y/N): ")
-if userusing == "Y":
-  print("You can only write expressions with two numbers.")
-  ceremony = input("enter your ceremony: ")
-  ceremonylist = list(ceremony)
-  print(ceremonylist)
-  if ceremonylist[1] == "+":
-    print(float(ceremonylist[0]) + float(ceremonylist[2]))
-  elif ceremonylist[1] == "-":
-    print(float(ceremonylist[0]) - float(ceremonylist[2]))
-  elif ceremonylist[1] == "*":
-    print(float(ceremonylist[0]) * float(ceremonylist[2]))
-  elif ceremonylist[1] == "/":
-    print(float(ceremonylist[0]) / float(ceremonylist[2]))
-else:
-  num1 = float(input("enter the number:" ))
-  operator = input("enter the operator(+,-,%,X): ")
-  num2 = float(input("enter the number:" ))
-  if operator == "+":
-    print(num1 + num2)
-  elif operator == "-":
-    print(num1 - num2)
-  elif operator == "%":
-    print(num1 / num2)
-  elif operator == "X":
-    print(num1 * num2)
+import re
+def calculate(expression):
+    tokens = re.findall(r'\d+|\+|\-|\*|\/', expression.replace(" ",""))
+    output = []
+    operators = []
+    precedence = {'+': 1, '-': 1, '*': 2, '/': 2}
+    for tokens in tokens:
+        if tokens.isdigit():
+            output.append(int(tokens))
+        else:
+            while operators and precedence.get(operators[-1], 0) >= precedence[tokens]:
+                output.append(operators.pop())
+              operators.append(tokens)
+            operators.append(tokens)
+          while operators:
+            output.append(operators.pop())
+            stack = []
+            for token in output:
+                if isinstance(token, int):
+                    stack.append(token)
+                else:
+                    if len(stack) < 2:
+                        return "Error"
+                    num2 = stack.pop()
+                    num1 = stack.pop()
+                    if token == '+':
+                        stack.append(num1 + num2)
+                    elif token == '-':
+                        stack.append(num1 - num2)
+                    elif token == '*':
+                        stack.append(num1 * num2)
+                    elif token == '/':
+                        if num2 == 0:
+                            return "Error: Division by zero"
+                        stack.append(num1 / num2)
+    return stack[0] if stack else 0
+user_input = input("Enter a mathematical expression: ")
+result = calculate(user_input)
+print("Result:", result)
+                
+    
